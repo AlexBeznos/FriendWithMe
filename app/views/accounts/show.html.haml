@@ -1,0 +1,18 @@
+%p#notice= notice
+
+%p
+  %b Email:
+  = @account.email
+%p
+  %b Status:
+  = @account.status
+%p
+  %b Uid:
+  = @account.uid
+%p
+  %b Access token:
+  = @account.access_token
+
+= link_to 'Edit', edit_account_path(@account)
+\|
+= link_to 'Back', accounts_path
