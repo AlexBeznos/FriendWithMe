@@ -1,0 +1,11 @@
+.panel.panel-default
+  .panel-heading
+    %h3.panel-title= link_to 'Edit', edit_message_path(@message), :class => "btn btn-default btn-xs pull-right"
+  .panel-body
+    .row
+      .col-md-8= @message.body
+      .col-md-4
+        - if @message.attachment
+          %img{ :src => "#{@message.attachment}", :width => 100, :class => 'img-thumbnail'}
+  .panel-footer
+    %btn.btn.btn-xs.disabled{:class => "btn-#{add_status(@message.status)}"}= @message.status

@@ -24,3 +24,36 @@
                   %btn.btn.btn-xs.disabled{:class => "btn-#{add_status(account.status)}"}= account.status ? account.status : 'Unseted'
                 %td= link_to 'Edit', edit_account_path(account), :class => 'btn btn-default btn-sm'
                 %td= link_to 'Destroy', account, :method => :delete, :data => { :confirm => 'Are you sure?' }, :class => 'btn btn-danger btn-sm'
+
+  .col-md-6
+    .panel.panel-default
+      .panel-heading
+        %h3.panel-title
+          Messages
+          %button.btn.btn-primary.btn-xs.pull-right{"data-target" => ".bs-example-modal-sm_message", "data-toggle" => "modal", :type => "button"} Add new message
+      .panel-body
+        %table.table.table-hover
+          %thead
+            %tr
+              %th Message
+              %th Attachment
+              %th status
+              %th
+              %th
+              %th
+
+          %tbody
+            - @messages.each do |message|
+              %tr
+                %td= link_to truncate(message.body, :length => 30), message
+                %td
+                  - if message.attachment != ''
+                    %img{ :src => "#{message.attachment}", :width => 100, :class => 'img-thumbnail'}
+                %td=message.status
+                %td
+                  - if message.status.to_sym == :active
+                    =link_to 'Deactivate', message_status_path(message), :method => :post, :class => 'btn btn-sm btn-warning'
+                  - else
+                    =link_to 'Activate', message_status_path(message), :method => :post, :class => 'btn btn-sm btn-success'
+                %td= link_to 'Edit', edit_message_path(message), :class => 'btn btn-default btn-sm'
+                %td= link_to 'Destroy', message, :method => :delete, :class => 'btn btn-danger btn-sm'

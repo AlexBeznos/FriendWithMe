@@ -4,7 +4,10 @@ Rails.application.routes.draw do
   get 'dashboard/index'
   root 'dashboard#index'
   resources :accounts
-  mount Browserlog::Engine => '/logs'
+  resources :messages do
+    post 'status', as: :status
+  end
+  mount Browserlog::Engine => '/logs', as: :logs
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

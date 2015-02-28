@@ -1,0 +1,15 @@
+- @message ||= Message.new
+
+.modal-body
+  = form_for @message, :html => { :class=> 'form-horizontal' } do |f|
+    .form-group
+      %label.col-sm-3.control-label{:for => "inputBody"} Body
+      .col-sm-9
+        = f.text_field :body, :class => 'form-control'
+    .form-group
+      %label.col-sm-3.control-label{:for => "inputAttachment"} Attachment link
+      .col-sm-9
+        = f.text_field :attachment, :class => 'form-control'
+    .form-group
+      .col-sm-offset-3.col-sm-9
+        %button.btn.btn-success{:type => "submit"} Submit

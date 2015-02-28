@@ -1,6 +1,6 @@
 class Account < ActiveRecord::Base
 
-  enum status: [:unauthorized, :active]
+  enum status: [:unactive, :active]
 
   validates :email, uniqueness: true, presence: true
 

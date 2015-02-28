@@ -1,12 +1,13 @@
 module ApplicationHelper
 
   def add_status(status)
-    if status == Account.statuses[:active]
+    st = status.try(:to_sym)
+    if st == :active
       "success"
-    elsif status == Account.statuses[:unauthorized]
+    elsif st == :unactive
       "warning"
     else
-      "error"
+      "danger"
     end
   end
 end
