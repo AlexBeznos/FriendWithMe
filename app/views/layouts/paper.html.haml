@@ -14,8 +14,12 @@
     = yield(:page_stylesheet) if content_for?(:page_stylesheet)
   %body
     .container
-      .row
-        = yield
+      = render 'shared/alert'
+      = yield
+
+    .modal.fade.bs-example-modal-sm{"aria-hidden" => "true", "aria-labelledby" => "mySmallModalLabel", :role => "dialog", :tabindex => "-1"}
+      .modal-dialog.modal-sm
+        .modal-content= render 'accounts/form'
 
     / Fixed navbar
     .navbar.navbar-inverse.navbar-fixed-top

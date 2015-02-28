@@ -1,2 +1,26 @@
-%h1 Dashboard#index
-%p Find me in app/views/dashboard/index.html.haml
+%h1 Dashboard
+
+.row
+  .col-md-6
+    .panel.panel-default
+      .panel-heading
+        %h3.panel-title
+          Accounts
+          %button.btn.btn-primary.btn-xs.pull-right{"data-target" => ".bs-example-modal-sm", "data-toggle" => "modal", :type => "button"} Add new user
+      .panel-body
+        %table.table.table-hover
+          %thead
+            %tr
+              %th Email
+              %th Status
+              %th
+              %th
+
+          %tbody
+            - @accounts.each do |account|
+              %tr
+                %td= link_to account.email, account
+                %td
+                  %btn.btn.btn-xs.disabled{:class => "btn-#{add_status(account.status)}"}= account.status ? account.status : 'Unseted'
+                %td= link_to 'Edit', edit_account_path(account), :class => 'btn btn-default btn-sm'
+                %td= link_to 'Destroy', account, :method => :delete, :data => { :confirm => 'Are you sure?' }, :class => 'btn btn-danger btn-sm'
