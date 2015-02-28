@@ -27,6 +27,7 @@ gem 'haml-rails'
 gem 'aasm'
 gem 'oj'
 gem 'active_type'
+gem 'browserlog'
 
 # configuration
 gem 'figaro'

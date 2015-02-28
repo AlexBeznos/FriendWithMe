@@ -31,6 +31,9 @@ GEM
       thread_safe (~> 0.1)
       tzinfo (~> 1.1)
     arel (5.0.1.20140414130214)
+    browserlog (0.0.2)
+      jquery-rails (~> 3)
+      rails (>= 3.2.18)
     builder (3.2.2)
     capybara (2.4.4)
       mime-types (>= 1.16)
@@ -210,6 +213,7 @@ PLATFORMS
 DEPENDENCIES
   aasm
   active_type
+  browserlog
   capybara
   coffee-rails (~> 4.0.0)
   factory_girl_rails
