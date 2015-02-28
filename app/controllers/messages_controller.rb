@@ -44,8 +44,11 @@ class MessagesController < ApplicationController
   # DELETE /messages/1
   # DELETE /messages/1.json
   def destroy
-    @message.destroy
-    redirect_to root_path, notice: 'Message was successfully destroyed.'
+    if @message.destroy
+      redirect_to root_path, notice: 'Message was successfully destroyed.'
+    else
+      redirect_to root_path, alert: 'Some thing went wrong! try more...'
+    end
   end
 
   private

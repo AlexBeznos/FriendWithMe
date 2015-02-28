@@ -1,8 +1,11 @@
 class Message < ActiveRecord::Base
   include AASM
 
+  default_scope -> { order(:id) }
+
   enum status: [:active, :unactive]
   validates :body, presence: true
+  before_destroy :is_last_active?
 
   aasm column: :status, whiny_transitions: false, no_direct_assignment: true do
     state :unactive, :initial => true
@@ -39,6 +42,10 @@ class Message < ActiveRecord::Base
 
     def is_any_active?
       Message.where(status: Message.statuses[:active]).count != 1
+    end
+
+    def is_last_active?
+      self.status.to_sym != :active
     end
 
 end
