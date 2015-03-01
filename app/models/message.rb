@@ -1,5 +1,6 @@
 class Message < ActiveRecord::Base
   include AASM
+  serialize :img_urls, Array
 
   default_scope -> { order(:id) }
 
@@ -9,7 +10,7 @@ class Message < ActiveRecord::Base
 
   aasm column: :status, whiny_transitions: false, no_direct_assignment: true do
     state :unactive, :initial => true
-    state :active, :before_enter => :set_statuses
+    state :active
 
     event :activate do
       transitions from: :unactive, to: :active
@@ -28,6 +29,19 @@ class Message < ActiveRecord::Base
     end
   end
 
+  def retrive_attachments
+    unless self.attachment == ''
+      self.img_urls = []
+      vk = VkontakteApi::Client.new
+      vk.photos.getById(photos: attachment.delete('photo'), extended: 0).each do |p|
+        self.img_urls << p['src']
+      end
+      puts self.img_urls
+      self.save
+    end
+  end
+
+  handle_asynchronously :retrive_attachments
   private
 
     def is_any_active?

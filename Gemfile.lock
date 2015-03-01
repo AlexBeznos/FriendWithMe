@@ -49,6 +49,12 @@ GEM
       execjs
     coffee-script-source (1.9.1)
     commonjs (0.2.7)
+    daemons (1.1.9)
+    delayed_job (4.0.6)
+      activesupport (>= 3.0, < 5.0)
+    delayed_job_active_record (4.0.3)
+      activerecord (>= 3.0, < 5.0)
+      delayed_job (>= 3.0, < 4.1)
     diff-lcs (1.2.5)
     docile (1.1.5)
     erubis (2.7.0)
@@ -240,6 +246,8 @@ DEPENDENCIES
   browserlog
   capybara
   coffee-rails (~> 4.0.0)
+  daemons
+  delayed_job_active_record
   factory_girl_rails
   figaro
   forgery

@@ -1,5 +1,6 @@
 class MessagesController < ApplicationController
   before_action :set_message, only: [:show, :edit, :update, :destroy]
+  after_action :check_attachments, only: [:create, :update]
 
   # GET /messages/1
   # GET /messages/1.json
@@ -12,7 +13,7 @@ class MessagesController < ApplicationController
     @message = Message.new(message_params)
 
     if @message.save
-      redirect_to root_path, notice: 'Message was successfully created.'
+      redirect_to root_path, notice: 'Message was successfully created. Attachments starts to download...'
     else
       redirect_to root_path, alert: 'Some thing went wrong! try more...'
     end
@@ -35,7 +36,7 @@ class MessagesController < ApplicationController
   # PATCH/PUT /messages/1.json
   def update
     if @message.update(message_params)
-      redirect_to root_path, notice: 'Message was successfully updates.'
+      redirect_to root_path, notice: 'Message was successfully updates. Attachments starts to download...'
     else
       redirect_to root_path, alert: 'Some thing went wrong! try more...'
     end
@@ -60,5 +61,9 @@ class MessagesController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def message_params
       params.require(:message).permit(:body, :attachment)
+    end
+
+    def check_attachments
+      @message.retrive_attachments
     end
 end

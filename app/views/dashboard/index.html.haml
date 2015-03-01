@@ -28,7 +28,7 @@
                 %td= link_to 'Destroy', account, :method => :delete, :data => { :confirm => 'Are you sure?' }, :class => 'btn btn-danger btn-sm'
 
   .col-md-6
-    .panel.panel-default
+    .panel.panel-default.message-off
       .panel-heading
         %h3.panel-title
           %a{"aria-controls" => "collapseTable", "aria-expanded" => "false", "data-toggle" => "collapse", :href => "#collapseTable"}
@@ -50,8 +50,9 @@
               %tr
                 %td= link_to truncate(message.body, :length => 20), message
                 %td
-                  - if message.attachment != ''
-                    %img{ :src => "#{message.attachment}", :width => 100, :class => 'img-thumbnail'}
+                  - if message.img_urls
+                    - message.img_urls.each do |p|
+                      %img{ :src => "#{p}", :width => 100, :class => 'img-thumbnail'}
                 %td
                   - if message.status.to_sym == :active
                     =link_to 'Deactivate', message_status_path(message), :method => :post, :class => 'btn btn-sm btn-warning'
@@ -61,7 +62,7 @@
                 %td= link_to 'Destroy', message, :method => :delete, :class => 'btn btn-danger btn-sm'
 
 
-    .panel.panel-default.collapse#collapseTable
+    .panel.panel-default.collapse#collapseTable.message-on
       .panel-heading
         %h3.panel-title
           %a{"aria-controls" => "collapseTable", "aria-expanded" => "false", "data-toggle" => "collapse", :href => "#collapseTable"}
@@ -74,8 +75,8 @@
             %tr
               %th Message
               %th Attachment
-              %th Url
-              %th status
+              %th url
+              %th Status
               %th
               %th
               %th
@@ -85,9 +86,10 @@
               %tr
                 %td.message-body= link_to message.body, message
                 %td
-                  - if message.attachment != ''
-                    %img{ :src => "#{message.attachment}", :width => 100, :class => 'img-thumbnail'}
-                %th http://hello.world.com/someblablabla
+                  - if message.img_urls
+                    - message.img_urls.each do |p|
+                      %img{ :src => "#{p}", :width => 100, :class => 'img-thumbnail'}
+                %th= message.url
                 %th= message.status
                 %td
                   - if message.status.to_sym == :active
