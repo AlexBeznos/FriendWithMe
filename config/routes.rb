@@ -1,8 +1,8 @@
 Rails.application.routes.draw do
   resources :accounts
 
-  get 'dashboard/index'
   root 'dashboard#index'
+  post 'vk_auth' => 'dashboard#vk_authorize', as: :vk_auth
   resources :accounts
   resources :messages do
     post 'status', as: :status

@@ -21,7 +21,9 @@
               %tr
                 %td= link_to account.email, account
                 %td
-                  %btn.btn.btn-xs.disabled{:class => "btn-#{add_status(account.status)}"}= account.status ? account.status : 'Unseted'
+                  %btn.btn.btn-xs.disabled.center-block{:class => "btn-#{add_status(account.status)}"}= account.status ? account.status : 'Unseted'
+                  - if account.status.try(:to_sym) == :unactive
+                    %a{:href => '#', :class=> 'btn btn-default btn-xs center-block', "data-target" => ".bs-modal-vk-auth", "data-toggle" => "modal", :target => '_blank'} Authenticate
                 %td= link_to 'Edit', edit_account_path(account), :class => 'btn btn-default btn-sm'
                 %td= link_to 'Destroy', account, :method => :delete, :data => { :confirm => 'Are you sure?' }, :class => 'btn btn-danger btn-sm'
 
@@ -57,3 +59,26 @@
                     =link_to 'Activate', message_status_path(message), :method => :post, :class => 'btn btn-sm btn-success'
                 %td= link_to 'Edit', edit_message_path(message), :class => 'btn btn-default btn-sm'
                 %td= link_to 'Destroy', message, :method => :delete, :class => 'btn btn-danger btn-sm'
+
+
+
+
+
+
+.modal.fade.bs-modal-vk-auth{"aria-hidden" => "true", "aria-labelledby" => "mySmallModalLabel", :role => "dialog", :tabindex => "-1"}
+  .modal-dialog.modal-md
+    .modal-header
+      %a{:href => "#{@activate}", :target => '_blank', :class => 'btn btn-xs btn-primary center-block'} Click here to get url
+    .modal-content
+      = form_tag('/vk_auth', method: 'post', class: 'form-horizontal') do
+        .form-group
+          %label.col-sm-3.control-label User
+          .col-sm-9
+            = select_tag(:user_id, options_for_select(@accounts.collect {|p| [ p.email, p.id ] unless p.status.to_sym == :active }), class: 'form-control')
+        .form-group
+          %label.col-sm-3.control-label Url
+          .col-sm-9
+            = text_field_tag(:user_url, nil, class: 'form-control')
+        .form-group
+          .col-sm-offset-3.col-sm-9
+            %button.btn.btn-success{:type => "submit"} Activate

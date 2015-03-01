@@ -35,6 +35,9 @@ gem 'figaro'
 # dump db
 gem 'yaml_db'
 
+# vk api
+gem 'vkontakte_api'
+
 # bootswach
 gem 'twitter-bootswatch-rails'
 gem 'twitter-bootswatch-rails-helpers'
