@@ -20,33 +20,32 @@ class User < ActiveRecord::Base
     end
   end
 
-  def self.send_message
-    user = User.where(status: User.statuses[:in_line]).first
-    active_messages = Message.where(status: Message.statuses[:active])
-    active_accounts = Account.where(status: Account.statuses[:active])
 
-    if user && !active_messages.empty? && !active_accounts.empty?
-      account = random(active_accounts)
-      message = random(active_messages)
-      client = vk_client(account)
-      domain = URI.parse(user.url).path.delete('/')
-      url = shorten_url(account, message)
+  def send_message
+    if self
+      active_messages = Message.where(status: Message.statuses[:active])
+      active_accounts = Account.where(status: Account.statuses[:active])
 
-      client.messages.send( domain: domain,
-                            message: "#{message}<br>#{url}",
-                            attachments: message.attachment)
-      user.send!
+      if !active_messages.empty? && !active_accounts.empty?
+        account = random(active_accounts)
+        message = random(active_messages)
+        client = vk_client(account)
+        domain = URI.parse(self.url).path.delete('/')
+        url = shorten_url(account, message)
+
+        client.messages.send( domain: domain,
+                              message: "#{message}<br>#{url}",
+                              attachments: message.attachment)
+        user.send!
+        send_next_message
+      end
     end
   end
 
-  def self.increment(hash = {})
-    user_id = SecureId.new(hash[:user]).decrypt
-    message_id = SecureId.new(hash[:message]).decrypt
-
-    user = User.find(user_id)
-    user.deliver! unless user.status.to_sym ==:delivered
-    user.message[message_id.to_s] =+ 1
-    user.save
+  def increment(message)
+    self.deliver! unless self.status.to_sym ==:delivered
+    self.message[message.id.to_s] =+ 1
+    self.save
   end
 
   handle_asynchronously :send_message, :run_at => Proc.new { 30.seconds.from_now }
@@ -68,5 +67,9 @@ class User < ActiveRecord::Base
 
     url = client.shorten(site_url)
     url.short_url
+  end
+
+  def send_next_message
+    User.where(status: User.statuses[:in_line]).first.send_message
   end
 end

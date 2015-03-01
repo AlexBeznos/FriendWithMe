@@ -2,17 +2,16 @@ class UsersController
   before_filter :authenticate, except: :redirect
 
   def start_sendind
-    User.send_message
+    User.where(status: User.statuses[:in_line]).first.send_message
     redirect_to root_path, notice: 'Sending started'
   end
 
 
   def redirect
-    UsersInvitations.increment({:user_id => deliver_params[:user],
-                                :message_id => deliver_params[:message]})
+    message = Message.find(SecureId.new(deliver_params[:message]).decrypt)
+    User.find(SecureId.new(deliver_params[:user]).encrypt).increment(message)
 
-    url = Message.find(SecureId.new(deliver_params[:message]).decrypt).url
-    redirect_to url
+    redirect_to message.url
   end
 
   private
