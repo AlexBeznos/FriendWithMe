@@ -13,9 +13,6 @@ class Message < ActiveRecord::Base
 
     event :activate do
       transitions from: :unactive, to: :active
-      after do
-        self.set_statuses
-      end
     end
 
     event :deactivate do
@@ -28,13 +25,6 @@ class Message < ActiveRecord::Base
       self.deactivate!
     elsif status.to_sym == :unactive
       self.activate!
-    end
-  end
-
-  def set_statuses
-    messages = Message.all
-    messages.each do |m|
-      m.deactivate! unless self == m
     end
   end
 
