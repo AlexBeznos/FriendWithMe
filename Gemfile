@@ -37,6 +37,9 @@ gem 'figaro'
 # dump db
 gem 'yaml_db'
 
+# shortener
+gem 'googl'
+
 # vk api
 gem 'vkontakte_api'
 
