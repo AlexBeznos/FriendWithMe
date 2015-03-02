@@ -3,5 +3,10 @@ Figaro.require_keys(
                     "DB_USERNAME",
                     "DB_PASSWORD",
                     "AUTH_USERNAME",
-                    "AUTH_PASSWORD"
+                    "AUTH_PASSWORD",
+                    "REDIRECT_URI",
+                    "SECURE_KEY",
+                    "GOOGLE_EMAIL",
+                    "GOOGLE_PASSWORD",
+                    "ROOT_URL"
                    )

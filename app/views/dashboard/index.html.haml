@@ -1,5 +1,3 @@
-%h1 Dashboard
-
 .row
   .col-md-6
     .panel.panel-default
@@ -121,3 +119,11 @@
         .form-group
           .col-sm-offset-3.col-sm-9
             %button.btn.btn-success{:type => "submit"} Activate
+
+.modal.fade.bs-example-modal-sm{"aria-hidden" => "true", "aria-labelledby" => "mySmallModalLabel", :role => "dialog", :tabindex => "-1"}
+  .modal-dialog.modal-sm
+    .modal-content= render 'accounts/form'
+
+.modal.fade.bs-example-modal-sm_message{"aria-hidden" => "true", "aria-labelledby" => "mySmallModalLabel", :role => "dialog", :tabindex => "-1"}
+  .modal-dialog.modal-md
+    .modal-content= render 'messages/form'

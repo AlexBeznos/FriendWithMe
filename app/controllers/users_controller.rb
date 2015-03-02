@@ -1,22 +1,52 @@
-class UsersController
+class UsersController < ActionController::Base
+  protect_from_forgery with: :exception
   before_filter :authenticate, except: :redirect
+  layout 'paper'
 
-  def start_sendind
+  def index
+    @users = User.all
+  end
+
+  def create
+    @user = User.new(user_params)
+
+    if @user.save
+      redirect_to users_path, notice: 'User created successfully!'
+    else
+      redirect_to users_path, alert: 'Something went wrong...'
+    end
+  end
+
+  def start_sending
     User.where(status: User.statuses[:in_line]).first.send_message
-    redirect_to root_path, notice: 'Sending started'
+    redirect_to users_path, notice: 'Messages sending had been started!'
   end
 
 
   def redirect
-    message = Message.find(SecureId.new(deliver_params[:message]).decrypt)
-    User.find(SecureId.new(deliver_params[:user]).encrypt).increment(message)
+    message = Message.find(SecureId.new(deliver_params[:message]).decrypt.to_i)
+    User.find(SecureId.new(deliver_params[:account]).decrypt.to_i).increment(message)
 
     redirect_to message.url
   end
 
+  def destroy
+    @user = User.find(params[:id])
+
+    if @user.destroy
+      redirect_to users_path, notice: 'User successfully destroyied'
+    else
+      redirect_to users_path, alert: 'Something went wrong...'
+    end
+  end
+
   private
   def deliver_params
-    params.permit(:user, :message)
+    params.permit(:account, :message)
+  end
+
+  def user_params
+    params.require(:user).permit(:url)
   end
 
   def authenticate

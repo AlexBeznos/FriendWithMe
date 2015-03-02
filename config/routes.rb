@@ -7,6 +7,9 @@ Rails.application.routes.draw do
   resources :messages do
     post 'status', as: :status
   end
+  resources :users, only: [:index, :create, :destroy]
+  get 'redirect' => 'users#redirect'
+  get 'users/start_sending' => 'users#start_sending', as: :users_start_send
   mount Browserlog::Engine => '/logs', as: :logs
 
   # The priority is based upon order of creation: first created -> highest priority.
