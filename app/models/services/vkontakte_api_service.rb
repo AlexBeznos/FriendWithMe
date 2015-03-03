@@ -23,7 +23,12 @@ class VkontakteApiService
                                  captcha_key: captcha_key)
 
            user.message_sended!
-          else
+         elsif e.error_code == 5
+           random_record['account'].deactivate!
+           puts "Account #{account.email} was deactivated!"
+           vk = VkontakteApiService.new
+           vk.send_message
+         else
             raise "VK Api error but not a capcha. Error: #{e.message}"
           end
         end

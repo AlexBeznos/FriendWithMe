@@ -16,6 +16,9 @@ class Account < ActiveRecord::Base
 
     event :deactivate do
       transitions from: :active, to: :unactive
+      before do
+        self.access_token = nil
+      end
     end
   end
 
