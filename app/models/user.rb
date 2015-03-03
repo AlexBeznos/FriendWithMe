@@ -39,7 +39,7 @@ class User < ActiveRecord::Base
             self.message_sended!
           end
         rescue => e
-          Rails.logger.info {:methods => 'send_message', :error => e}
+          Rails.logger.info ['send_message', e]
         end
 
         send_next_message
@@ -62,7 +62,7 @@ class User < ActiveRecord::Base
       rand_id = rand(1..query.count)
       query.take(rand_id).last
     rescue => e
-      Rails.logger.info {:methods => 'random', :error => e}
+      Rails.logger.info ['random', e]
     end
   end
 
@@ -70,7 +70,7 @@ class User < ActiveRecord::Base
     begin
       VkontakteApi::Client.new(account.access_token)
     rescue => e
-      Rails.logger.info {:methods => 'vk_client', :error => e}
+      Rails.logger.info ['vk_client', e]
     end
   end
 
@@ -82,7 +82,7 @@ class User < ActiveRecord::Base
       url = client.shorten(site_url)
       url.short_url
     rescue => e
-      Rails.logger.info {:method => 'Shorten url', :error => e}
+      Rails.logger.info ['Shorten url', e]
     end
   end
 
