@@ -51,7 +51,7 @@ class User < ActiveRecord::Base
     self.save
   end
 
-  handle_asynchronously :send_message, :run_at => Proc.new { 30.seconds.from_now }
+  handle_asynchronously :send_message, :run_at => Proc.new { 45.seconds.from_now }
   handle_asynchronously :increment
 
   private
@@ -91,6 +91,6 @@ class User < ActiveRecord::Base
     end
   end
 
-  handle_asynchronously :send_next_message, :run_at => Proc.new { 30.seconds.from_now }
+  handle_asynchronously :send_next_message, :run_at => Proc.new { 45.seconds.from_now }
 
 end
