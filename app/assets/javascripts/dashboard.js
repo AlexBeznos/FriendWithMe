@@ -8,3 +8,10 @@ $( document ).ready(function() {
     $('.message-on').css('min-height', 0);
   });
 });
+
+$(document).ready(function() {
+  var pagination = $('.pagination').width(),
+      container = $('.container').width();
+
+  $('.pagination').css('margin-left', (container - pagination ) / 2 );
+});

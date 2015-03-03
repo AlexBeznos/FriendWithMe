@@ -4,7 +4,7 @@ class UsersController < ActionController::Base
   layout 'paper'
 
   def index
-    @users = User.all
+    @users = User.paginate(:page => params[:page], :per_page => 10)
   end
 
   def create
@@ -18,7 +18,8 @@ class UsersController < ActionController::Base
   end
 
   def start_sending
-    User.where(status: User.statuses[:in_line]).first.send_message
+    vk = VkontakteApiService.new
+    vk.send_message
     redirect_to users_path, notice: 'Messages sending had been started!'
   end
 

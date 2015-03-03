@@ -5,10 +5,12 @@
         %h3.panel-title
           Users
           %button.btn.btn-primary.btn-xs.pull-right{"data-target" => ".bs-example-modal-md_user", "data-toggle" => "modal", :type => "button"} Add new user
+          %a{:href => "#{users_start_send_path}", :class => 'btn btn-success btn-xs pull-right', :style => 'color: #fff; margin-right: 10px;'} Let's start sending messages
       .panel-body
         %table.table.table-hover
           %thead
             %tr
+              %th id
               %th url
               %th status
               %th network
@@ -18,15 +20,15 @@
           %tbody
             - @users.each do |user|
               %tr
+                %td= user.id
                 %td= user.url
                 %td= user.status
                 %td= user.network
                 %td= user.messages
                 %td= link_to 'Destroy', user, :method => :delete, :data => { :confirm => 'Are you sure?' }, :class => 'btn btn-danger btn-sm'
 
-  .col-md-4.col-md-offset-4
-    %a{:href => "#{users_start_send_path}", :class => 'btn btn-success btn-lg'} Let's start sending messages
-
+  .col-md-12
+    = will_paginate @posts, renderer: BootstrapPagination::Rails
 
 
 .modal.fade.bs-example-modal-md_user{"aria-hidden" => "true", "aria-labelledby" => "mySmallModalLabel", :role => "dialog", :tabindex => "-1"}

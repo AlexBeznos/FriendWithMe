@@ -31,6 +31,10 @@ gem 'browserlog'
 gem 'daemons'
 gem 'delayed_job_active_record'
 
+# pagination
+gem 'will_paginate', '~> 3.0.6'
+gem 'will_paginate-bootstrap'
+
 # configuration
 gem 'figaro'
 
@@ -46,6 +50,9 @@ gem 'vkontakte_api'
 # bootswach
 gem 'twitter-bootswatch-rails'
 gem 'twitter-bootswatch-rails-helpers'
+
+# Capcha solver
+gem 'deathbycaptcha', '~> 5.0.0'
 
 group :development, :test do
   gem 'rspec-rails', '~> 3.0.0'
