@@ -34,12 +34,10 @@ class User < ActiveRecord::Base
         domain = URI.parse(self.url).path.delete('/')
         url = shorten_url(self, message)
 
-        begin
-          if client.messages.send(domain: domain, message: "#{message.body}<br>#{url}", attachment: message.attachment)
-            self.message_sended!
-          end
-        rescue => e
-          Rails.logger.info ['send_message', e]
+        Rails.logger.info 'send_message'
+
+        if client.messages.send(domain: domain, message: "#{message.body}<br>#{url}", attachment: message.attachment)
+          self.message_sended!
         end
 
         send_next_message
@@ -58,32 +56,23 @@ class User < ActiveRecord::Base
 
   private
   def random(query)
-    begin
-      rand_id = rand(1..query.count)
-      query.take(rand_id).last
-    rescue => e
-      Rails.logger.info ['random', e]
-    end
+    Rails.logger.info 'random'
+    rand_id = rand(1..query.count)
+    query.take(rand_id).last
   end
 
   def vk_client(account)
-    begin
-      VkontakteApi::Client.new(account.access_token)
-    rescue => e
-      Rails.logger.info ['vk_client', e]
-    end
+    Rails.logger.info 'vk_client'
+    VkontakteApi::Client.new(account.access_token)
   end
 
   def shorten_url(user, message)
-    begin
-      site_url = "#{ENV['ROOT_URL']}redirect?account=#{SecureId.new(user.id.to_s).encrypt}&message=#{SecureId.new(message.id.to_s).encrypt}"
-      client = Googl.client(ENV['GOOGLE_EMAIL'], ENV['GOOGLE_PASSWORD'])
+    Rails.logger.info 'Shorten url'
+    site_url = "#{ENV['ROOT_URL']}redirect?account=#{SecureId.new(user.id.to_s).encrypt}&message=#{SecureId.new(message.id.to_s).encrypt}"
+    client = Googl.client(ENV['GOOGLE_EMAIL'], ENV['GOOGLE_PASSWORD'])
 
-      url = client.shorten(site_url)
-      url.short_url
-    rescue => e
-      Rails.logger.info ['Shorten url', e]
-    end
+    url = client.shorten(site_url)
+    url.short_url
   end
 
   def send_next_message
