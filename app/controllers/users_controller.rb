@@ -25,7 +25,7 @@ class UsersController < ActionController::Base
 
   def redirect
     message = Message.find(SecureId.new(deliver_params[:message]).decrypt.to_i)
-    User.find(SecureId.new(deliver_params[:account]).decrypt.to_i).increment(message)
+    User.find(SecureId.new(deliver_params[:account]).decrypt.to_i).increment_message_relation(message)
 
     redirect_to message.url
   end

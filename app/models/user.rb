@@ -45,14 +45,18 @@ class User < ActiveRecord::Base
     end
   end
 
-  def increment(message)
+  def increment_message_relation(message)
     self.message_delivered! unless self.status.to_sym == :delivered
-    self.messages[message.id.to_s] +=1
+    if self.messages.has_key?(message.id.to_s)
+      self.messages[message.id.to_s] += 1
+    else
+      self.message[message.id.to_s] = 1
+    end
     self.save
   end
 
   handle_asynchronously :send_message, :run_at => Proc.new { 45.seconds.from_now }
-  handle_asynchronously :increment
+  handle_asynchronously :increment_message_relation
 
   private
   def random(query)
