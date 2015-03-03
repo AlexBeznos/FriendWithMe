@@ -34,9 +34,14 @@ class User < ActiveRecord::Base
         domain = URI.parse(self.url).path.delete('/')
         url = shorten_url(self, message)
 
-        if client.messages.send(domain: domain, message: "#{message.body}<br>#{url}", attachment: message.attachment)
-          self.message_sended!
+        begin
+          if client.messages.send(domain: domain, message: "#{message.body}<br>#{url}", attachment: message.attachment)
+            self.message_sended!
+          end
+        rescue => e
+          Rails.logger.info {:methods => 'send_message', :error => e}
         end
+
         send_next_message
       end
     end
@@ -53,25 +58,37 @@ class User < ActiveRecord::Base
 
   private
   def random(query)
-    rand_id = rand(1..query.count)
-    query.take(rand_id).last
+    begin
+      rand_id = rand(1..query.count)
+      query.take(rand_id).last
+    rescue => e
+      Rails.logger.info {:methods => 'random', :error => e}
+    end
   end
 
   def vk_client(account)
-    VkontakteApi::Client.new(account.access_token)
+    begin
+      VkontakteApi::Client.new(account.access_token)
+    rescue => e
+      Rails.logger.info {:methods => 'vk_client', :error => e}
+    end
   end
 
   def shorten_url(user, message)
-    site_url = "#{ENV['ROOT_URL']}redirect?account=#{SecureId.new(user.id.to_s).encrypt}&message=#{SecureId.new(message.id.to_s).encrypt}"
-    client = Googl.client(ENV['GOOGLE_EMAIL'], ENV['GOOGLE_PASSWORD'])
+    begin
+      site_url = "#{ENV['ROOT_URL']}redirect?account=#{SecureId.new(user.id.to_s).encrypt}&message=#{SecureId.new(message.id.to_s).encrypt}"
+      client = Googl.client(ENV['GOOGLE_EMAIL'], ENV['GOOGLE_PASSWORD'])
 
-    url = client.shorten(site_url)
-    url.short_url
+      url = client.shorten(site_url)
+      url.short_url
+    rescue => e
+      Rails.logger.info {:method => 'Shorten url', :error => e}
+    end
   end
 
   def send_next_message
     users = User.where(status: User.statuses[:in_line])
-    unless users.count == 0
+    unless users.count.empty?
       users.first.send_message
     else
       raise 'It is no users to deliver more'
