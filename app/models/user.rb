@@ -88,7 +88,7 @@ class User < ActiveRecord::Base
 
   def send_next_message
     users = User.where(status: User.statuses[:in_line])
-    unless users.count.empty?
+    unless users.empty?
       users.first.send_message
     else
       raise 'It is no users to deliver more'
