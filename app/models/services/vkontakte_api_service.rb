@@ -38,6 +38,8 @@ class VkontakteApiService
         vk = VkontakteApiService.new
         vk.send_message
       end
+    else
+      puts 'It is no users!'
     end
   end
 
