@@ -2,7 +2,7 @@ class VkontakteApiService
 
   def send_message
     get_user = User.where(status: User.statuses[:in_line]).limit(1).first
-    permorm(get_user.id)
+    perform(get_user.id)
   end
 
   handle_asynchronously :send_message, :run_at => Proc.new { 45.seconds.from_now }
