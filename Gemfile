@@ -51,8 +51,8 @@ gem 'vkontakte_api'
 gem 'twitter-bootswatch-rails'
 gem 'twitter-bootswatch-rails-helpers'
 
-# Capcha solver
-gem 'deathbycaptcha', '~> 5.0.0'
+# # Capcha solver
+# gem 'deathbycaptcha', '~> 5.0.0'
 
 group :development, :test do
   gem 'rspec-rails', '~> 3.0.0'
