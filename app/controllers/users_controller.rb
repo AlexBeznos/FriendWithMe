@@ -23,7 +23,6 @@ class UsersController < ActionController::Base
     redirect_to users_path, notice: 'Messages sending had been started!'
   end
 
-
   def redirect
     message = Message.find(SecureId.new(deliver_params[:message]).decrypt.to_i)
     User.find(SecureId.new(deliver_params[:account]).decrypt.to_i).increment_message_relation(message)
