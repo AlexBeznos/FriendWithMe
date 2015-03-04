@@ -15,6 +15,10 @@ class VkontakteApiService
           user.message_sended!
         rescue VkontakteApi::Error => e
           if e.error_code == 14
+            puts '++++++++++'
+            puts 'Puts captcha'
+            puts e.captcha_img
+            puts e.ispect
             captcha_key = solve_captcha(e.captcha_img)
             client.messages.send(domain: domain,
                                  message: "#{random_record['message'].body}<br>#{url}",
