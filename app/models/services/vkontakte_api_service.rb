@@ -1,7 +1,8 @@
 class VkontakteApiService
 
   def send_message
-    user = User.where(status: User.statuses[:in_line]).limit(1).first
+    get_user = User.where(status: User.statuses[:in_line]).limit(1).first
+    user = User.find(get_user.id)
     unless user.nil?
       active_ = retrive_active_record
       unless active_['messages'].empty? && active_['accounts'].empty?
