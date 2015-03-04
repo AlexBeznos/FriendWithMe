@@ -15,22 +15,22 @@ class VkontakteApiService
           user.message_sended!
         rescue VkontakteApi::Error => e
           if e.error_code == 14
-          #   captcha_key = solve_captcha(e.captcha_img)
-          #   client.messages.send(domain: domain,
-          #                        message: "#{random_record['message'].body}<br>#{url}",
-          #                        attachment: random_record['message'].attachment,
-          #                        captcha_sid: e.captcha_sid,
-          #                        captcha_key: captcha_key)
-           #
-          #  user.message_sended!
-          vk = VkontakteApiService.new
-          vk.send_message
-         elsif e.error_code == 5
-           random_record['account'].deactivate!
-           puts "Account #{account.email} was deactivated!"
-           vk = VkontakteApiService.new
-           vk.send_message
-         else
+            captcha_key = solve_captcha(e.captcha_img)
+            client.messages.send(domain: domain,
+                                 message: "#{random_record['message'].body}<br>#{url}",
+                                 attachment: random_record['message'].attachment,
+                                 captcha_sid: e.captcha_sid,
+                                 captcha_key: captcha_key)
+
+            user.message_sended!
+            vk = VkontakteApiService.new
+            vk.send_message
+          elsif e.error_code == 5
+            random_record['account'].deactivate!
+            puts "Account #{account.email} was deactivated!"
+            vk = VkontakteApiService.new
+            vk.send_message
+          else
             raise "VK Api error but not a capcha. Error: #{e.message}"
           end
         end
