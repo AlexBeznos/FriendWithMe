@@ -14,16 +14,19 @@ class VkontakteApiService
     unless user.nil?
       active_ = retrive_active_record
       unless active_['messages'].empty? && active_['accounts'].empty?
-        random_record = retrive_random_records(active_)
-        client = vk_client(random_record['account'])
-        domain = URI.parse(user.url).path.delete('/')
-        url = shorten_url(user, random_record['message'])
-
         begin
+          random_record = retrive_random_records(active_)
+          client = vk_client(random_record['account'])
+          domain = URI.parse(user.url).path.delete('/')
+          url = shorten_url(user, random_record['message'])
           client.messages.send(domain: domain, message: "#{random_record['message'].body}<br>#{url}", attachment: random_record['message'].attachment)
           user.message_sended!
         rescue VkontakteApi::Error => e
           if e.error_code == 14
+            random_record = retrive_random_records(active_)
+            client = vk_client(random_record['account'])
+            domain = URI.parse(user.url).path.delete('/')
+            url = shorten_url(user, random_record['message'])
             puts '++++++++++'
             puts 'Puts captcha'
             puts e.captcha_img
