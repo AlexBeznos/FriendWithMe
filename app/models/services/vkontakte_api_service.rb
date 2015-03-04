@@ -18,7 +18,8 @@ class VkontakteApiService
             puts '++++++++++'
             puts 'Puts captcha'
             puts e.captcha_img
-            puts e.ispect
+            puts e.captcha_sid
+            puts e.methods
             captcha_key = solve_captcha(e.captcha_img)
             client.messages.send(domain: domain,
                                  message: "#{random_record['message'].body}<br>#{url}",

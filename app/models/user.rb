@@ -1,5 +1,6 @@
 class User < ActiveRecord::Base
   include AASM
+  default_scope -> {order('id')}
 
   serialize :messages, Hash
 
