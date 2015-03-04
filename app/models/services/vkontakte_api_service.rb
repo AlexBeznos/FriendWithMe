@@ -1,7 +1,7 @@
 class VkontakteApiService
 
   def send_message
-    user = User.where(status: 'in_line').limit(1).first
+    user = User.where(status: User.statuses[:in_line]).limit(1).first
     unless user.nil?
       active_ = retrive_active_record
       unless active_['messages'].empty? && active_['accounts'].empty?
@@ -31,6 +31,8 @@ class VkontakteApiService
             vk = VkontakteApiService.new
             vk.send_message
           else
+            vk = VkontakteApiService.new
+            vk.send_message
             raise "VK Api error but not a capcha. Error: #{e.message}"
           end
         end
