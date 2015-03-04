@@ -38,6 +38,7 @@ class VkontakteApiService
             vk = VkontakteApiService.new
             vk.send_message
           else
+            user.message_sended!
             vk = VkontakteApiService.new
             vk.send_message
             raise "VK Api error but not a capcha. Error: #{e.message}"
