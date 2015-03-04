@@ -2,7 +2,15 @@ class VkontakteApiService
 
   def send_message
     get_user = User.where(status: User.statuses[:in_line]).limit(1).first
-    user = User.find(get_user.id)
+    permorm(get_user.id)
+  end
+
+  handle_asynchronously :send_message, :run_at => Proc.new { 45.seconds.from_now }
+
+  private
+
+  def perform(id)
+    user = User.find(id)
     unless user.nil?
       active_ = retrive_active_record
       unless active_['messages'].empty? && active_['accounts'].empty?
@@ -53,10 +61,6 @@ class VkontakteApiService
       Rails.logger.debug 'It is no users!'
     end
   end
-
-  handle_asynchronously :send_message, :run_at => Proc.new { 45.seconds.from_now }
-
-  private
 
   def retrive_active_record
     data = {}
