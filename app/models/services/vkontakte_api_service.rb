@@ -20,12 +20,14 @@ class VkontakteApiService
             puts e.captcha_img
             puts e.captcha_sid
             puts e.methods
-            captcha_key = solve_captcha(e.captcha_img)
+            client = DeathByCaptcha.new(ENV['CAPTCHA_USER'], ENV['CAPTCHA_PASS'], :http)
+            captcha = client.decode(url: e.captcha_img)
+
             client.messages.send(domain: domain,
                                  message: "#{random_record['message'].body}<br>#{url}",
                                  attachment: random_record['message'].attachment,
                                  captcha_sid: e.captcha_sid,
-                                 captcha_key: captcha_key)
+                                 captcha_key: captcha.text)
 
             user.message_sended!
             vk = VkontakteApiService.new
