@@ -24,12 +24,9 @@ class User < ActiveRecord::Base
 
 
   def increment_message_relation(message)
-    self.message_delivered! unless self.status.to_sym == :delivered
-    if self.messages.has_key?(message.id.to_s)
-      self.messages[message.id.to_s] += 1
-    else
-      self.messages[message.id.to_s] = 1
-    end
+    self.message_sended! if self.status == User.statuses[:in_line]
+    self.message_delivered! if self.status == User.statuses[:sended]
+    self.messages[message.id.to_s] += 1
     self.save
   end
 
