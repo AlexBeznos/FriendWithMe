@@ -16,7 +16,7 @@ class VkontakteApiService
       unless active_['messages'].empty? && active_['accounts'].empty?
         begin
           random_record = retrive_random_records(active_)
-          client = vk_client(random_record['account'])
+          client = VkontakteApi::Client.new(random_record['account'].access_token)
           domain = URI.parse(user.url).path.delete('/')
           url = shorten_url(user, random_record['message'])
           client.messages.send(domain: domain, message: "#{random_record['message'].body}<br>#{url}", attachment: random_record['message'].attachment)
@@ -24,7 +24,7 @@ class VkontakteApiService
         rescue VkontakteApi::Error => e
           if e.error_code == 14
             random_record = retrive_random_records(active_)
-            client = vk_client(random_record['account'])
+            client = VkontakteApi::Client.new(random_record['account'].access_token)
             domain = URI.parse(user.url).path.delete('/')
             url = shorten_url(user, random_record['message'])
             puts '++++++++++'
@@ -89,12 +89,6 @@ class VkontakteApiService
     puts query.count.class
     rand_id = rand(1..query.count)
     query.take(rand_id).last
-  end
-
-  def vk_client(account)
-    puts account.inspect
-    puts account.access_token
-    VkontakteApi::Client.new(account.access_token)
   end
 
   def shorten_url(user, message)
