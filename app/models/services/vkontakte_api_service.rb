@@ -13,27 +13,23 @@ class VkontakteApiService
     user = User.find(id)
     unless user.nil?
       active_ = retrive_active_record
+      random_record = retrive_random_records(active_)
+      client = VkontakteApi::Client.new(random_record['account'].access_token)
+      domain = URI.parse(user.url).path.delete('/')
+      url = shorten_url(user, random_record['message'])
       unless active_['messages'].empty? && active_['accounts'].empty?
         begin
-          random_record = retrive_random_records(active_)
-          client = VkontakteApi::Client.new(random_record['account'].access_token)
-          domain = URI.parse(user.url).path.delete('/')
-          url = shorten_url(user, random_record['message'])
           client.messages.send(domain: domain, message: "#{random_record['message'].body}<br>#{url}", attachment: random_record['message'].attachment)
           user.message_sended!
         rescue VkontakteApi::Error => e
           if e.error_code == 14
-            random_record = retrive_random_records(active_)
-            client = VkontakteApi::Client.new(random_record['account'].access_token)
-            domain = URI.parse(user.url).path.delete('/')
-            url = shorten_url(user, random_record['message'])
             puts '++++++++++'
             puts 'Puts captcha'
             puts e.captcha_img
             puts e.captcha_sid
             puts e.methods
-            client = DeathByCaptcha.new(ENV['CAPTCHA_USER'], ENV['CAPTCHA_PASS'], :http)
-            captcha = client.decode(url: e.captcha_img)
+            client_captcha = DeathByCaptcha.new(ENV['CAPTCHA_USER'], ENV['CAPTCHA_PASS'], :http)
+            captcha = client_captcha.decode(url: e.captcha_img)
 
             client.messages.send(domain: domain,
                                  message: "#{random_record['message'].body}<br>#{url}",
