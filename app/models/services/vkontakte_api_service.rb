@@ -49,8 +49,11 @@ class VkontakteApiService
             Rails.logger.debug "Account #{account.email} was deactivated!"
             vk = VkontakteApiService.new
             vk.send_message
-          else
+          elsif e.error_code == 7
             user.message_sended!
+            vk = VkontakteApiService.new
+            vk.send_message
+          else
             vk = VkontakteApiService.new
             vk.send_message
             raise "VK Api error but not a capcha. Error: #{e.message}"
