@@ -46,7 +46,7 @@ class VkontakteApiService
             vk.send_message
           elsif e.error_code == 5
             random_record['account'].deactivate!
-            Rails.logger.debug "Account #{account.email} was deactivated!"
+            Rails.logger.debug "Account #{random_record['account'].email} was deactivated!"
             vk = VkontakteApiService.new
             vk.send_message
           elsif e.error_code == 7
