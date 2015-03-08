@@ -5,7 +5,7 @@ class VkontakteApiService
     perform(get_user.id)
   end
 
-  handle_asynchronously :send_message, :run_at => Proc.new { 45.seconds.from_now }
+  handle_asynchronously :send_message, :run_at => Proc.new { 2.minutes.from_now }
 
   private
 
@@ -23,7 +23,7 @@ class VkontakteApiService
           user.message_sended!
         rescue VkontakteApi::Error => e
           if e.error_code == 14
-            puts '++++++++++'
+            puts '++++++++++++'
             puts 'Puts captcha'
             puts e.captcha_img
             puts e.captcha_sid
@@ -42,14 +42,22 @@ class VkontakteApiService
             vk.send_message
           elsif e.error_code == 5
             random_record['account'].deactivate!
-            Rails.logger.debug "Account #{random_record['account'].email} was deactivated!"
+            user.message_failed!
+            puts "Account #{random_record['account'].email} was deactivated!"
             vk = VkontakteApiService.new
             vk.send_message
           elsif e.error_code == 7
-            user.message_sended!
+            random_record['account'].deactivate!
+            user.message_failed!
+            puts "Account #{random_record['account'].email} was deactivated!"
             vk = VkontakteApiService.new
             vk.send_message
+          elsif e.error_code == 6
+            user.message_failed!
+            puts '____________________________'
+            puts 'Too many requests per second'
           else
+            user.message_failed!
             vk = VkontakteApiService.new
             vk.send_message
             raise "VK Api error but not a capcha. Error: #{e.message}"
@@ -60,7 +68,7 @@ class VkontakteApiService
         vk.send_message
       end
     else
-      Rails.logger.debug 'It is no users!'
+      raise 'It is no users!'
     end
   end
 

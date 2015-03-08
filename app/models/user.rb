@@ -4,7 +4,7 @@ class User < ActiveRecord::Base
 
   serialize :messages, Hash
 
-  enum status: [:in_line, :sended, :delivered]
+  enum status: [:in_line, :sended, :delivered, :failed]
   validates :url, presence: true
   before_destroy :check_status
 
@@ -20,6 +20,10 @@ class User < ActiveRecord::Base
     event :message_delivered do
       transitions from: :sended, to: :delivered
     end
+
+    event :message_failed do
+      transitions from: :in_line, to: :failed
+    end
   end
 
 
@@ -28,7 +32,7 @@ class User < ActiveRecord::Base
       self.message_sended!
       self.message_delivered!
     end
-    
+
     if self.messages.has_key?(message.id.to_s)
       self.messages[message.id.to_s] += 1
     else
