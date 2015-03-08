@@ -16,7 +16,7 @@ class VkontakteApiService
       random_record = retrive_random_records(active_)
       client = VkontakteApi::Client.new(random_record['account'].access_token)
       domain = URI.parse(user.url).path.delete('/')
-      url = shorten_url(user, random_record['message'])
+      url = random_record['message'].url
       unless active_['messages'].empty? && active_['accounts'].empty?
         begin
           client.messages.send(domain: domain, message: "#{random_record['message'].body}<br>#{url}", attachment: random_record['message'].attachment)
