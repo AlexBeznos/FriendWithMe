@@ -5,7 +5,7 @@ class VkontakteApiService
     perform(get_user.id)
   end
 
-  handle_asynchronously :send_message, :run_at => Proc.new { 2.minutes.from_now }
+  handle_asynchronously :send_message, :run_at => Proc.new { 30.seconds.from_now }
 
   private
 
