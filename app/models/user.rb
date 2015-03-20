@@ -12,6 +12,7 @@ class User < ActiveRecord::Base
     state :in_line, :initial => true
     state :sended
     state :delivered
+    state :failed
 
     event :message_sended do
       transitions from: :in_line, to: :sended
