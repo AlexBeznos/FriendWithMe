@@ -32,7 +32,7 @@ gem 'daemons'
 gem 'delayed_job_active_record'
 
 # pagination
-gem 'will_paginate', '~> 3.0.4', :git => 'git@github.com:mislav/will_paginate.git'
+gem 'will_paginate', '~> 3.0.4'
 gem 'will_paginate-bootstrap'
 
 # configuration
@@ -52,7 +52,7 @@ gem 'twitter-bootswatch-rails'
 gem 'twitter-bootswatch-rails-helpers'
 
 # Capcha solver
-gem 'deathbycaptcha', '~> 5.0.0', :git => 'git@github.com:infosimples/deathbycaptcha.git'
+gem 'deathbycaptcha', '~> 5.0.0'
 
 group :development, :test do
   gem 'rspec-rails', '~> 3.0.0'
