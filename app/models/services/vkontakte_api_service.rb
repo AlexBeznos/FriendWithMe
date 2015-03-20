@@ -41,19 +41,16 @@ class VkontakteApiService
             vk = VkontakteApiService.new
             vk.send_message
           elsif e.error_code == 5
-            random_record['account'].deactivate!
             user.message_failed!
             puts "Account #{random_record['account'].email} was deactivated!"
             vk = VkontakteApiService.new
             vk.send_message
           elsif e.error_code == 7
-            random_record['account'].deactivate!
             user.message_failed!
             puts "Account #{random_record['account'].email} was deactivated!"
             vk = VkontakteApiService.new
             vk.send_message
           elsif e.error_code == 6
-            user.message_failed!
             puts '____________________________'
             puts 'Too many requests per second'
           else
