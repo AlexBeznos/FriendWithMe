@@ -41,7 +41,6 @@ class Message < ActiveRecord::Base
     end
   end
 
-  handle_asynchronously :retrive_attachments
   private
 
     def is_any_active?

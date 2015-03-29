@@ -42,7 +42,6 @@ class User < ActiveRecord::Base
     self.save
   end
 
-  handle_asynchronously :increment_message_relation
 
   private
 

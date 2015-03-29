@@ -28,8 +28,12 @@ gem 'aasm'
 gem 'oj'
 gem 'active_type'
 gem 'browserlog'
-gem 'daemons'
-gem 'delayed_job_active_record'
+
+# scheduler
+gem 'rufus-scheduler'
+
+# configuration system
+gem 'configatron'
 
 # pagination
 gem 'will_paginate', '~> 3.0.4'

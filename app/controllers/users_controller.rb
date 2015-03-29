@@ -1,3 +1,5 @@
+require 'configatron'
+
 class UsersController < ActionController::Base
   protect_from_forgery with: :exception
   before_filter :authenticate, except: :redirect
@@ -18,9 +20,12 @@ class UsersController < ActionController::Base
   end
 
   def start_sending
-    vk = VkontakteApiService.new
-    vk.send_message
-    redirect_to users_path, notice: 'Messages sending had been started!'
+    if User.any? && Account.active.any? && Message.active.any?
+      configatron.aproved = true
+      redirect_to users_path, notice: 'Messages sending had been started!'
+    else
+      redirect_to users_path, alert: "I'm not gona start sending until everything will be ready! Now you have #{User.all.count} users, #{Account.active.count} active accounts and #{Message.active.count} active messages."
+    end
   end
 
   def redirect
