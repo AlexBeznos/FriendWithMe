@@ -35,22 +35,15 @@ class VkontakteApiService
                                  captcha_key: captcha.text)
 
             user.message_sended!
-            vk = VkontakteApiService.new
-            vk.send_message
           elsif e.error_code == 5
             Rails.logger.info "Bad authorization, account #{random_record['account'].id} #{random_record['account'].email}"
 
             random_record['account'].deactivate!
             user.message_failed!
-
-            vk = VkontakteApiService.new
-            vk.send_message
           elsif e.error_code == 7
             Rails.logger.info "No persissions for this action. user #{user.url}"
 
             user.message_failed!
-            vk = VkontakteApiService.new
-            vk.send_message
           elsif e.error_code == 6
             Rails.logger.info "Toooo many requests per second!"
 
@@ -59,13 +52,8 @@ class VkontakteApiService
             Rails.logger.info "Something undetected wierd happend!"
 
             user.message_failed!
-            vk = VkontakteApiService.new
-            vk.send_message
           end
         end
-
-        vk = VkontakteApiService.new
-        vk.send_message
       end
     else
       raise 'It is no users!'
