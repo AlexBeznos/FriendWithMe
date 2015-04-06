@@ -17,3 +17,6 @@
 
 # Application yml
 /config/application.yml
+
+# mac files
+.DS_Store
